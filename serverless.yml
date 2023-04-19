@@ -1,0 +1,28 @@
+service: algoreasearch
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  environment:
+    STAGE: ${opt:stage, 'dev'}
+  runtime: nodejs18.x
+  deploymentMethod: direct
+  region: eu-west-3
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - "execute-api:ManageConnections"
+          Resource:
+            - "arn:aws:execute-api:*:*:**/@connections/*"
+
+functions:
+  heartbeat:
+    handler: src/ws-handlers/heartbeat.handler
+    events:
+      - websocket:
+          route: heartbeat
+plugins:
+  - serverless-plugin-typescript
+  - serverless-offline

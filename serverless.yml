@@ -18,11 +18,11 @@ provider:
             - "arn:aws:execute-api:*:*:**/@connections/*"
 
 functions:
-  heartbeat:
-    handler: src/ws-handlers/heartbeat.handler
+  demo:
+    handler: src/demo.handler
     events:
       - websocket:
-          route: heartbeat
+          route: demo
 plugins:
   - serverless-plugin-typescript
   - serverless-offline

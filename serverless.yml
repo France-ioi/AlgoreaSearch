@@ -20,6 +20,8 @@ provider:
 functions:
   demo:
     handler: src/demo.handler
+    layers:
+      - arn:aws:lambda:eu-west-3:269646813173:layer:chromium:1
     events:
       - websocket:
           route: demo

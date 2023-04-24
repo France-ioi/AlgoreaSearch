@@ -28,9 +28,11 @@
   "dependencies": {
     "@types/aws-lambda": "^8.10.95",
     "fp-ts": "^2.5.0",
-    "io-ts": "^2.2.16"
+    "io-ts": "^2.2.16",
+    "puppeteer-core": "^19.8.0"
   },
   "devDependencies": {
+    "@sparticuz/chromium": "^112.0.2",
     "@types/jest": "^27.5.1",
     "@types/serverless": "^3.12.11",
     "@typescript-eslint/eslint-plugin": "^5.26.0",

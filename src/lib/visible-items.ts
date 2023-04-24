@@ -13,13 +13,13 @@ export async function visibleItems(token: string): Promise<string[]> {
  * Return a list of all item descendants of navItems (including themselves)
  */
 async function visibleDescendants(path: string[], navItems: NavItems, token: string): Promise<string[]> {
-  let list: string[] = [];
+  const list = [];
   for (const navItem of navItems) {
     if (navItem.type === 'Chapter' && navItem.has_visible_children && navItem.permissions.can_view !== 'info') {
       const newPath = [ ...path, navItem.id ];
       await start(newPath, { token });
-      list = [ ...list, navItem.id, ...await visibleDescendants(newPath, await getNav(navItem.id, { token }), token) ];
-    } else list = [ ...list, navItem.id ];
+      list.push(navItem.id, ...await visibleDescendants(newPath, await getNav(navItem.id, { token }), token));
+    } else list.push(navItem.id);
   }
   return list;
 }

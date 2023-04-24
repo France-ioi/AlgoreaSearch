@@ -4,16 +4,17 @@ import { pipe } from 'fp-ts/lib/function';
 import * as D from 'io-ts/Decoder';
 import { decodeOrThrow } from '../utils/decode';
 import { get } from '../utils/http';
+import { apiUrl } from './http-common';
 
 const itemDecoder = pipe(
   D.struct({
     id: D.string,
-    requiresExplicitEntry: D.boolean,
+    requires_explicit_entry: D.boolean,
     string: pipe(
       D.struct({
         title: D.nullable(D.string),
-        languageTag: D.string,
-        imageUrl: D.nullable(D.string),
+        language_tag: D.string,
+        image_url: D.nullable(D.string),
       }),
       D.intersect(
         D.partial({
@@ -23,18 +24,15 @@ const itemDecoder = pipe(
       )
     ),
     type: D.literal('Chapter','Task'),
-    textId: D.nullable(D.string),
-    validationType: D.literal('None','All','AllButOne','Categories','One','Manual'),
-    noScore: D.boolean,
-    fullScreen: D.literal('forceYes','forceNo','default'),
-    childrenLayout: D.literal('List', 'Grid'),
-    allowsMultipleAttempts: D.boolean,
-    entryParticipantType: D.literal('Team', 'User'),
+    text_id: D.nullable(D.string),
+    validation_type: D.literal('None','All','AllButOne','Categories','One','Manual'),
+    no_score: D.boolean,
+    allows_multiple_attempts: D.boolean,
   }),
   D.intersect(
     D.partial({
       url: D.nullable(D.string),
-      usesApi: D.nullable(D.boolean),
+      uses_api: D.nullable(D.boolean),
     })
   )
 );
@@ -42,5 +40,5 @@ const itemDecoder = pipe(
 export type Item = D.TypeOf<typeof itemDecoder>;
 
 export async function getItem(itemId: string, options: { token: string }): Promise<Item> {
-  return decodeOrThrow(itemDecoder)(await get(`/items/${itemId}`, options));
+  return decodeOrThrow(itemDecoder)(await get(`${apiUrl}/items/${itemId}`, options));
 }

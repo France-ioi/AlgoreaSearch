@@ -1,5 +1,6 @@
 service: algoreasearch
 frameworkVersion: '3'
+useDotenv: true
 
 provider:
   name: aws
@@ -19,12 +20,11 @@ provider:
 
 functions:
   demo:
-    handler: src/demo.handler
+    handler: src/handlers/demo.handler
     layers:
       - arn:aws:lambda:eu-west-3:269646813173:layer:chromium:1
-    events:
-      - websocket:
-          route: demo
+  search:
+    handler: src/handlers/search.handler
 plugins:
   - serverless-plugin-typescript
   - serverless-offline

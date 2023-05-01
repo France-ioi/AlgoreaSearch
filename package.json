@@ -26,12 +26,14 @@
   },
   "homepage": "https://github.com/France-ioi/AlgoreaSearch#readme",
   "dependencies": {
+    "@opensearch-project/opensearch": "^2.2.1",
     "@types/aws-lambda": "^8.10.95",
     "fp-ts": "^2.5.0",
     "io-ts": "^2.2.16",
     "puppeteer-core": "^19.8.0"
   },
   "devDependencies": {
+    "@aws-sdk/credential-provider-node": "^3.319.0",
     "@sparticuz/chromium": "^112.0.2",
     "@types/jest": "^27.5.1",
     "@types/serverless": "^3.12.11",

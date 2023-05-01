@@ -1,8 +1,8 @@
 // import { getTempUserToken } from './http-services/auth';
 // import { itemMetadata } from './lib/item-metadata';
 // import { visibleItems } from './lib/visible-items';
-import { headlessBrowser } from './task-api-client/browser';
-import { getResourcesContent } from './task-api-client/resources-fetcher';
+import { headlessBrowser } from '../task-api-client/browser';
+import { getResourcesContent } from '../task-api-client/resources-fetcher';
 
 export async function handler(_event: unknown): Promise<unknown> {
 

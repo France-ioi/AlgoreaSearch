@@ -88,7 +88,7 @@ module.exports = {
       }
     },
     {
-      files: ['*/services/*.ts'],
+      files: ['*/handlers/*.ts'],
       rules: {
         'no-console': 'off',
       }

@@ -7,6 +7,7 @@ provider:
   environment:
     STAGE: ${opt:stage, 'dev'}
     OPENSEARCH_NODE: https://${env:SEARCH_AUTH}@search-algorea-orbdsfmhccs7qnb27q2weasx3y.eu-west-3.es.amazonaws.com/
+    DEBUG: 0
   runtime: nodejs18.x
   deploymentMethod: direct
   region: eu-west-3
@@ -27,6 +28,7 @@ functions:
       - arn:aws:lambda:eu-west-3:269646813173:layer:chromium:1
   search:
     handler: src/handlers/search.handler
+    timeout: 30
     url: true
 plugins:
   - serverless-plugin-typescript

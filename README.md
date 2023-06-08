@@ -34,6 +34,12 @@ npx @puppeteer/browsers install chromium@latest --path /tmp/localChromium
 ```
 Then, update `CHROMIUM_PATH` in `.env.dev` file.
 
+## Invoke search locally
+
+```
+serverless invoke local --function search -d '{"queryStringParameters":{"q":"Terminology"}}'
+```
+
 ## Deploy the headless browser on lambda
 
 Use lambda layers as explained: https://github.com/sparticuz/chromium#aws-lambda-layer

@@ -1,4 +1,6 @@
-import { ApiResponse, Client } from '@opensearch-project/opensearch';
+import { Client } from '@opensearch-project/opensearch';
+import * as D from 'io-ts/Decoder';
+import { decodeOrThrow } from '../utils/decode';
 
 export interface Content {
   id: string,
@@ -8,6 +10,27 @@ export interface Content {
   l2subtitles?: string[],
   l3subtitles?: string[],
   type: 'Task'|'Chapter',
+}
+
+const apiResponseDecoder = D.struct({
+  /* eslint-disable @typescript-eslint/naming-convention */
+  body: D.struct({
+    hits: D.struct({
+      hits: D.array(D.struct({
+        _id: D.string,
+        _score: D.number,
+        _source: D.struct({
+          id: D.string,
+          title: D.string,
+          type: D.literal('Task', 'Chapter')
+        })
+      }))
+    })
+  })
+  /* eslint-enable @typescript-eslint/naming-convention */
+});
+interface SearchResponse {
+  search_results: (D.TypeOf<typeof apiResponseDecoder>['body']['hits']['hits'][number]['_source'] & { score: number })[],
 }
 
 export class SearchClient {
@@ -27,8 +50,9 @@ export class SearchClient {
     });
   }
 
-  async search(query: string): Promise<ApiResponse<Record<string, any>, unknown>> {
-    return this.client.search({
+  async search(query: string, debug = process.env.DEBUG === '1'): Promise<SearchResponse> {
+    const rawResp = await this.client.search({
+      /* eslint-disable @typescript-eslint/naming-convention */
       index: 'content',
       body: {
         query: {
@@ -48,8 +72,16 @@ export class SearchClient {
             // }
           }
         },
+        _source: [ 'id', 'title', 'type' ],
+        /* eslint-enable @typescript-eslint/naming-convention */
       },
     });
+    // eslint-disable-next-line no-console
+    if (debug) console.debug(`Search term: ${query}. Search response: ${JSON.stringify(rawResp)}`);
+    const resp = decodeOrThrow(apiResponseDecoder)(rawResp);
+    return {
+      search_results: resp.body.hits.hits.map(r => ({ ...r._source, score: r._score }))
+    };
   }
 
 }

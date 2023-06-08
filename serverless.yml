@@ -33,3 +33,13 @@ functions:
 plugins:
   - serverless-plugin-typescript
   - serverless-offline
+
+resources:
+  Resources:
+    ALBInvokePermission:
+      Type: AWS::Lambda::Permission
+      Properties:
+        FunctionName: arn:aws:lambda:eu-west-3:269646813173:function:algoreasearch-dev-search
+        Action: lambda:InvokeFunction
+        Principal: elasticloadbalancing.amazonaws.com
+        SourceArn: "arn:aws:elasticloadbalancing:eu-central-1:269646813173:targetgroup/lambda-f26tOfCEwHSNeTmxH1jw/32fd6b20ee9500df"

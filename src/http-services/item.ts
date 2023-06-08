@@ -4,7 +4,6 @@ import { pipe } from 'fp-ts/lib/function';
 import * as D from 'io-ts/Decoder';
 import { decodeOrThrow } from '../utils/decode';
 import { get } from '../utils/http';
-import { apiUrl } from './http-common';
 
 const itemDecoder = pipe(
   D.struct({
@@ -40,5 +39,5 @@ const itemDecoder = pipe(
 export type Item = D.TypeOf<typeof itemDecoder>;
 
 export async function getItem(itemId: string, options: { token: string }): Promise<Item> {
-  return decodeOrThrow(itemDecoder)(await get(`${apiUrl}/items/${itemId}`, options));
+  return decodeOrThrow(itemDecoder)(await get(`${process.env.API_URL!}/items/${itemId}`, options));
 }

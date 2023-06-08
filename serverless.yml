@@ -7,6 +7,7 @@ provider:
   environment:
     STAGE: ${opt:stage, 'dev'}
     OPENSEARCH_NODE: ${env:OPENSEARCH_NODE}
+    API_URL: ${env:API_URL}
     DEBUG: 0
   runtime: nodejs18.x
   deploymentMethod: direct

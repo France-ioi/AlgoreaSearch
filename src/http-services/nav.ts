@@ -2,7 +2,6 @@
 import * as D from 'io-ts/Decoder';
 import { decodeOrThrow } from '../utils/decode';
 import { get } from '../utils/http';
-import { apiUrl } from './http-common';
 
 const navItemDecoder = D.struct({
   id: D.string,
@@ -24,10 +23,10 @@ const itemNavDecoder = D.struct({
 export type NavItems = D.TypeOf<typeof navItemDecoder>[];
 
 export async function getRoots(options: { token: string }): Promise<NavItems> {
-  return decodeOrThrow(rootActivitiesDecoder)(await get(`${apiUrl}/current-user/group-memberships/activities`, options))
+  return decodeOrThrow(rootActivitiesDecoder)(await get(`${process.env.API_URL!}/current-user/group-memberships/activities`, options))
     .map(root => root.activity);
 }
 
 export async function getNav(itemId: string, options: { token: string }): Promise<NavItems> {
-  return decodeOrThrow(itemNavDecoder)(await get(`${apiUrl}/items/${itemId}/navigation?attempt_id=0`, options)).children;
+  return decodeOrThrow(itemNavDecoder)(await get(`${process.env.API_URL!}/items/${itemId}/navigation?attempt_id=0`, options)).children;
 }

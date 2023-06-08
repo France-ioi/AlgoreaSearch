@@ -5,6 +5,8 @@ export interface Content {
   title: string,
   summary: string,
   fullText?: string,
+  l2subtitles?: string[],
+  l3subtitles?: string[],
   type: 'Task'|'Chapter',
 }
 
@@ -16,11 +18,11 @@ export class SearchClient {
     return this.client.close();
   }
 
-  async insert({ id, title, summary, fullText, type }: Content): Promise<void> {
+  async insert({ id, title, summary, fullText, l2subtitles, l3subtitles, type }: Content): Promise<void> {
     await this.client.index({
       id,
       index: 'content',
-      body: { id, title, summary, fullText, type },
+      body: { id, title, summary, fullText, type, l2subtitles, l3subtitles },
       refresh: true,
     });
   }
@@ -35,7 +37,7 @@ export class SearchClient {
               {
                 query_string: {
                   query,
-                  fields: [ 'title^4', 'summary^2', 'fullText' ],
+                  fields: [ 'title^8', 'summary^4', 'l2subtitles^4', 'l3subtitles^3', 'fullText^2' ],
                 },
               }
             ],

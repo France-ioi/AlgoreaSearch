@@ -32,6 +32,8 @@ export async function handler(_event: unknown): Promise<unknown> {
         id: item.id,
         title: rContent.title,
         summary: rContent.summary,
+        l2subtitles: rContent.level2,
+        l3subtitles: rContent.level3,
         fullText: rContent.text,
         type: item.type // 'Task' expected
       };

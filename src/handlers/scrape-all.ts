@@ -54,7 +54,7 @@ export async function handler(_event: unknown): Promise<unknown> {
     //console.debug(`item with id: ${item.id}: ${JSON.stringify(content)}`);
     tLog(`document ${item.id} (${item.type}) indexed`);
   }
-  tLog('indexation completed');
+  tLog('indexing completed');
 
   await search.close();
   await browser.close();

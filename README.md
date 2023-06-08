@@ -22,7 +22,7 @@ npm test
 ## Deploy code on AWS
 
 ```sh
-sls deploy [-f <function name>] --aws-profile <aws profile>
+sls deploy [-f <function name>] --stage <stage> --aws-profile <aws profile>
 ```
 
 If you do global changes (for instance the role permissions), you need to deploy with specifying any function.
@@ -34,10 +34,16 @@ npx @puppeteer/browsers install chromium@latest --path /tmp/localChromium
 ```
 Then, update `CHROMIUM_PATH` in `.env.dev` file.
 
+## Invoke scrapping locally
+
+```
+serverless invoke local --stage <stage> --function scrape-all
+```
+
 ## Invoke search locally
 
 ```
-serverless invoke local --function search -d '{"queryStringParameters":{"q":"Terminology"}}'
+serverless invoke local --stage <stage> --function search -d '{"queryStringParameters":{"q":"Terminology"}}'
 ```
 
 ## Deploy the headless browser on lambda

@@ -4,21 +4,22 @@ import { visibleItems } from '../lib/visible-items';
 import { Content, SearchClient } from '../search-client/search-client';
 import { headlessBrowser } from '../task-api-client/browser';
 import { getResourcesContent } from '../task-api-client/resources-fetcher';
+import { tLog } from '../utils/timed_log';
 
 export async function handler(_event: unknown): Promise<unknown> {
 
   const token = await getTempUserToken();
-  console.log('Temp token fetched');
+  tLog('Temp token fetched');
   const ids = await visibleItems(token);
-  console.log(`Visible id list fetched (count: ${ids.length})`);
+  tLog(`Visible id list fetched (count: ${ids.length})`);
   const items = (await itemMetadata(ids, token)).slice(0,10);
-  console.log(`Item metadata fetched (count with url: ${items.length})`);
+  tLog(`Item metadata fetched (count with url: ${items.length})`);
 
   const search = new SearchClient();
-  console.log('Opensearch client created');
+  tLog('Opensearch client created');
 
   const { browser, page } = await headlessBrowser();
-  console.log('Headless browser ready');
+  tLog('Headless browser ready');
 
   for (const item of items) {
     let content: Content;
@@ -45,14 +46,14 @@ export async function handler(_event: unknown): Promise<unknown> {
         type: item.type
       };
     } else {
-      console.log(`Task (${item.id}) without url, no indexation`);
+      tLog(`Task (${item.id}) without url, no indexation`);
       continue;
     }
     //console.debug(`item with id: ${item.id}: ${JSON.stringify(content)}`);
     await search.insert(content);
-    console.log(`document ${item.id} (${item.type}) indexed`);
+    tLog(`document ${item.id} (${item.type}) indexed`);
   }
-  console.log('indexation completed');
+  tLog('indexation completed');
 
   await search.close();
   await browser.close();

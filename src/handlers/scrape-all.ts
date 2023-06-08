@@ -1,7 +1,7 @@
 import { getTempUserToken } from '../http-services/auth';
 import { itemMetadata } from '../lib/item-metadata';
 import { visibleItems } from '../lib/visible-items';
-import { Content, SearchClient } from '../search-client/search-client';
+import { SearchClient } from '../search-client/search-client';
 import { headlessBrowser } from '../task-api-client/browser';
 import { getResourcesContent } from '../task-api-client/resources-fetcher';
 import { tLog } from '../utils/timed_log';
@@ -22,14 +22,19 @@ export async function handler(_event: unknown): Promise<unknown> {
   tLog('Headless browser ready');
 
   for (const item of items) {
-    let content: Content;
+    let rContent: Awaited<ReturnType<typeof getResourcesContent>>[number]|undefined;
+
     if (item.type === 'Task' && item.url) {
-      const rContent = (await getResourcesContent(page, item.url))[0];
-      if (!rContent) {
-        console.error(`Unexpected empty content on content with id ${item.id} and url ${item.url}`);
-        continue;
+      try {
+        rContent = (await getResourcesContent(page, item.url))[0];
+      } catch (e) {
+        const name = typeof(e) === 'object' && e !== null && 'name' in e ? e.name as string : '?';
+        const message = typeof(e) === 'object' && e !== null && 'message' in e ? e.message as string : '?';
+        tLog(`unable to get resources content from ${item.id}, url: ${item.url}, error name: ${name}, message: ${message}`);
       }
-      content = {
+    }
+    if (rContent) {
+      await search.insert({
         id: item.id,
         title: rContent.title,
         summary: rContent.summary,
@@ -37,20 +42,16 @@ export async function handler(_event: unknown): Promise<unknown> {
         l3subtitles: rContent.level3,
         fullText: rContent.text,
         type: item.type // 'Task' expected
-      };
-    } else if (item.type === 'Chapter') {
-      content = {
+      });
+    } else {
+      await search.insert({
         id: item.id,
         title: item.string.title ?? '',
         summary: item.string.description ?? '',
         type: item.type
-      };
-    } else {
-      tLog(`Task (${item.id}) without url, no indexation`);
-      continue;
+      });
     }
     //console.debug(`item with id: ${item.id}: ${JSON.stringify(content)}`);
-    await search.insert(content);
     tLog(`document ${item.id} (${item.type}) indexed`);
   }
   tLog('indexation completed');

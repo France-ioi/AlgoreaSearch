@@ -2,7 +2,7 @@ import { Client } from '@opensearch-project/opensearch';
 import * as D from 'io-ts/Decoder';
 import { decodeOrThrow } from '../utils/decode';
 
-export interface Content {
+interface Content {
   id: string,
   title: string,
   summary: string,

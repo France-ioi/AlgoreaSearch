@@ -12,7 +12,7 @@ export async function handler(_event: unknown): Promise<unknown> {
   tLog('Temp token fetched');
   const ids = await visibleItems(token);
   tLog(`Visible id list fetched (count: ${ids.length})`);
-  const items = (await itemMetadata(ids, token)).slice(0,10);
+  const items = (await itemMetadata(ids, token));
   tLog(`Item metadata fetched (count with url: ${items.length})`);
 
   const search = new SearchClient();

@@ -8,6 +8,7 @@ const navItemDecoder = D.struct({
   has_visible_children: D.boolean,
   type: D.literal('Chapter','Task'),
   permissions: D.struct({ can_view: D.string }),
+  requires_explicit_entry: D.boolean,
 });
 
 const rootActivitiesDecoder = D.array(

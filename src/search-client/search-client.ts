@@ -44,7 +44,7 @@ export class SearchClient {
   async insert({ id, title, summary, fullText, l2subtitles, l3subtitles, type }: Content): Promise<void> {
     await this.client.index({
       id,
-      index: 'content',
+      index: process.env.INDEX_NAME!,
       body: { id, title, summary, fullText, type, l2subtitles, l3subtitles },
       refresh: true,
     });
@@ -53,7 +53,7 @@ export class SearchClient {
   async search(query: string, debug = process.env.DEBUG === '1'): Promise<SearchResponse> {
     const rawResp = await this.client.search({
       /* eslint-disable @typescript-eslint/naming-convention */
-      index: 'content',
+      index: process.env.INDEX_NAME!,
       body: {
         query: {
           bool: {

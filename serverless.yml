@@ -6,7 +6,7 @@ provider:
   name: aws
   environment:
     STAGE: ${opt:stage, 'dev'}
-    OPENSEARCH_NODE: https://${env:SEARCH_AUTH}@search-algorea-orbdsfmhccs7qnb27q2weasx3y.eu-west-3.es.amazonaws.com/
+    OPENSEARCH_NODE: ${env:OPENSEARCH_NODE}
     DEBUG: 0
   runtime: nodejs18.x
   deploymentMethod: direct

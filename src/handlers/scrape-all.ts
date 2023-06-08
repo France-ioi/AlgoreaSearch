@@ -51,7 +51,6 @@ export async function handler(_event: unknown): Promise<unknown> {
         type: item.type
       });
     }
-    //console.debug(`item with id: ${item.id}: ${JSON.stringify(content)}`);
     tLog(`document ${item.id} (${item.type}) indexed`);
   }
   tLog('indexing completed');

@@ -30,7 +30,7 @@ export async function handler(_event: unknown): Promise<unknown> {
       } catch (e) {
         const name = typeof(e) === 'object' && e !== null && 'name' in e ? e.name as string : '?';
         const message = typeof(e) === 'object' && e !== null && 'message' in e ? e.message as string : '?';
-        tLog(`unable to get resources content from ${item.id}, url: ${item.url}, error name: ${name}, message: ${message}`);
+        tLog(`unable to get resources content from ${item.id}, url: ${item.url}, error name: ${name}, message: ${message.slice(0,200)}`);
       }
     }
     if (rContent) {

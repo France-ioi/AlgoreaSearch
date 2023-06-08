@@ -36,7 +36,7 @@ export async function handler(_event: unknown): Promise<unknown> {
     if (rContent) {
       await search.insert({
         id: item.id,
-        title: rContent.title,
+        title: item.string.title ?? rContent.title,
         summary: rContent.summary,
         l2subtitles: rContent.level2,
         l3subtitles: rContent.level3,

@@ -31,7 +31,16 @@ functions:
   search:
     handler: src/handlers/search.handler
     timeout: 30
-    url: true
+    url:
+      cors:
+        allowedOrigins:
+          - http://localhost:4200
+          - https://dev.algorea.org
+          - https://beta.opentezos.com
+        allowedHeaders:
+          - Content-Type
+        allowedMethods:
+          - GET
 plugins:
   - serverless-plugin-typescript
   - serverless-offline

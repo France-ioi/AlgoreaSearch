@@ -59,8 +59,9 @@ export class SearchClient {
           bool: {
             must: [
               {
-                query_string: {
+                multi_match: {
                   query,
+                  fuzziness: 'AUTO', // allow several (depending on the query length) character edits
                   fields: [ 'title^8', 'summary^4', 'l2subtitles^4', 'l3subtitles^3', 'fullText^2' ],
                 },
               }

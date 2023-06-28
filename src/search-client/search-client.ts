@@ -2,6 +2,8 @@ import { Client } from '@opensearch-project/opensearch';
 import * as D from 'io-ts/Decoder';
 import { decodeOrThrow } from '../utils/decode';
 
+const nbHightlights = 3;
+
 interface Content {
   id: string,
   title: string,
@@ -23,6 +25,13 @@ const apiResponseDecoder = D.struct({
           id: D.string,
           title: D.string,
           type: D.literal('Task', 'Chapter')
+        }),
+        highlight: D.partial({
+          title: D.array(D.string),
+          summary: D.array(D.string),
+          l2subtitles: D.array(D.string),
+          l3subtitles: D.array(D.string),
+          fullText: D.array(D.string),
         })
       }))
     })
@@ -30,7 +39,11 @@ const apiResponseDecoder = D.struct({
   /* eslint-enable @typescript-eslint/naming-convention */
 });
 interface SearchResponse {
-  search_results: (D.TypeOf<typeof apiResponseDecoder>['body']['hits']['hits'][number]['_source'] & { score: number })[],
+  search_results: (D.TypeOf<typeof apiResponseDecoder>['body']['hits']['hits'][number]['_source'] & {
+    score: number,
+    title_highlight: string|null,
+    highlights: string[],
+  })[],
 }
 
 export class SearchClient {
@@ -73,6 +86,16 @@ export class SearchClient {
             // }
           }
         },
+        highlight: {
+          fields: {
+            title: {},
+            summary: {},
+            l2subtitles: {},
+            l3subtitles: {},
+            fullText: {}
+          },
+          number_of_fragments: nbHightlights
+        },
         _source: [ 'id', 'title', 'type' ],
         /* eslint-enable @typescript-eslint/naming-convention */
       },
@@ -81,7 +104,17 @@ export class SearchClient {
     if (debug) console.debug(`Search term: ${query}. Search response: ${JSON.stringify(rawResp)}`);
     const resp = decodeOrThrow(apiResponseDecoder)(rawResp);
     return {
-      search_results: resp.body.hits.hits.map(r => ({ ...r._source, score: r._score }))
+      search_results: resp.body.hits.hits.map(r => ({
+        ...r._source,
+        score: r._score,
+        title_highlight: r.highlight.title?.at(0) ?? null,
+        highlights: [
+          ...(r.highlight.summary ?? []),
+          ...(r.highlight.l2subtitles ?? []),
+          ...(r.highlight.l3subtitles ?? []),
+          ...(r.highlight.fullText ?? [])
+        ].slice(0, nbHightlights),
+      }))
     };
   }
 

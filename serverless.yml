@@ -9,7 +9,7 @@ provider:
     OPENSEARCH_NODE: ${env:OPENSEARCH_NODE}
     API_URL: ${env:API_URL}
     INDEX_NAME: ${env:INDEX_NAME}
-    DEBUG: 0
+    DEBUG: ${env:DEBUG}
   runtime: nodejs18.x
   deploymentMethod: direct
   region: eu-west-3

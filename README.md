@@ -51,3 +51,9 @@ serverless invoke local --stage <stage> --function search -d '{"queryStringParam
 Use lambda layers as explained: https://github.com/sparticuz/chromium#aws-lambda-layer
 
 Use layers published with their releases: https://github.com/Sparticuz/chromium/releases
+
+## Release
+
+```sh
+npm run release
+```

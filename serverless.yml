@@ -1,4 +1,4 @@
-service: algoreasearch
+service: alg-search
 frameworkVersion: '3'
 useDotenv: true
 

@@ -4,6 +4,8 @@ useDotenv: true
 
 provider:
   name: aws
+  deploymentBucket:
+    name: alg-ops
   environment:
     STAGE: ${opt:stage, 'dev'}
     OPENSEARCH_NODE: ${env:OPENSEARCH_NODE}

@@ -38,7 +38,12 @@ functions:
         allowedOrigins:
           - http://localhost:4200
           - https://dev.algorea.org
+          - https://parcours.algorea.org
+          - https://staging.parcours.algorea.org
+          - https://beta.parcours.algorea.org
           - https://beta.opentezos.com
+          - https://www.opentezos.com
+          - https://opentezos.com
         allowedHeaders:
           - Content-Type
         allowedMethods:

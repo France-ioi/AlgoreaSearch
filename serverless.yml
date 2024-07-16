@@ -34,6 +34,7 @@ functions:
     url:
       cors:
         allowedOrigins:
+          - http://localhost:4100
           - http://localhost:4200
           - https://dev.algorea.org
           - https://beta.opentezos.com
